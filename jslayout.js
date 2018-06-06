@@ -1,4 +1,5 @@
-IDWLayoutInit = function () {
+
+function IDWLayoutInit() {
     var forallChildren = function (node, fn) {
         var running = true;
         var initNode = node;
@@ -36,7 +37,6 @@ IDWLayoutInit = function () {
         removeIndirectNodes(rows, grid);
         removeIndirectNodes(columns, grid);
         for (var i = 0; i < grid[0].children.length; i++) {
-           // document.body.children[0].
             if($(grid[0].children[i]).hasClass('RowDefinition')) {
                 rows.push(grid[0].children[i]);
             }
