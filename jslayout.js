@@ -208,7 +208,13 @@ function IDWLayoutInit() {
 
         layoutRows();
         layoutColumns();
-
+        var children = grid.children();
+        for (var i = 0; i < children.length; i++) {
+            var child = children[i];
+            if (child.layout) {
+                child.layout();
+            }
+        }
 
     };
 
@@ -217,9 +223,9 @@ function IDWLayoutInit() {
         //Grid plugin
         app.hookClass('Grid', function (instance) {
             var i = $(instance);
-            instance.addEventListener('layout', function () {
+            instance.layout = function () {
                 layoutGrid(i);
-            });
+            };
             layoutGrid(i);
         });
     }];
@@ -237,15 +243,19 @@ function IDWLayoutInit() {
         for (var i = 0; i < Plugins.length; i++) {
             Plugins[i](app);
         }
-        app[0].addEventListener('layout', function () {
+        app[0].layout = function () {
             forallChildren(app[0], function (node) {
-                node.dispatchEvent(new Event('layout'));
+                if (node.layout) {
+                    node.layout();
+                }
             });
-        });
+        };
 
         $(window).resize(function () {
             forallChildren(app[0], function (node) {
-                node.dispatchEvent(new Event('layout'));
+                if (node.layout) {
+                    node.layout();
+                }
             });
         });
         
