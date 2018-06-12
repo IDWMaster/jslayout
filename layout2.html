@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+<html style="width:100%;height:100%;">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script type="text/javascript" src="jswidgets.js"></script>
+    
+</head>
+<body id="Application" style="width:100%;height:100%;margin:0;">
+    <script type="text/javascript">
+        var init = function () {
+            var app = createApplication(document.getElementById('Application'));
+            var grid = app.createGrid();
+            app.root.addWidget(grid);
+            grid.addFullRow().addAutoRow().addFullRow();
+            grid.addFullColumn().addAutoColumn().addFullColumn();
+            var textDiv = document.createElement('div');
+            var centeredText = app.createWidget(textDiv);
+            centeredText.getDomNode().innerText = 'Test DIV';
+            grid.addWidget(centeredText, 1, 1);
+            var fontSize = 12;
+            var increase = true;
+            setInterval(function () {
+                textDiv.style.fontSize = fontSize + 'px';
+                grid.layout();
+                if (increase) {
+                    fontSize++;
+                    if (fontSize == 32) {
+                        increase = false;
+                    }
+                } else {
+                    fontSize--;
+                    if (fontSize == 4) {
+                        increase = true;
+                    }
+                }
+            }, 20);
+            grid.layout();
+            window.onresize = function () {
+                grid.layout();
+            };
+        };
+        init();
+    </script>
+</body>
+</html>
