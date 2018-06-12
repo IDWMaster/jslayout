@@ -16,10 +16,17 @@
             grid.addFullColumn().addAutoColumn().addFullColumn();
             var textDiv = document.createElement('div');
             var centeredText = app.createWidget(textDiv);
-            centeredText.getDomNode().innerText = 'Test DIV';
+            centeredText.getDomNode().innerText = 'Test';
             grid.addWidget(centeredText, 1, 1);
+            
             var fontSize = 12;
             var increase = true;
+            var makeWidgetWithBackgroundColor = function (color) {
+                var div = document.createElement('div');
+                div.style.backgroundColor = color;
+                return app.createWidget(div);
+            };
+            grid.addWidget(makeWidgetWithBackgroundColor('blue'), 0, 0).addWidget(makeWidgetWithBackgroundColor('red'), 1, 0).addWidget(makeWidgetWithBackgroundColor('green'), 2, 0);
             setInterval(function () {
                 textDiv.style.fontSize = fontSize + 'px';
                 grid.layout();

@@ -181,6 +181,10 @@ function createApplication(rootNode) {
                 var remainingWidth = gridWidth;
                 var remainingHeight = gridHeight;
                 for (var child = node.firstChild; child != null; child = child.next) {
+                    child.node.style.width = '';
+                    child.node.style.height = '';
+                }
+                for (var child = node.firstChild; child != null; child = child.next) {
                     var widget = child.widget;
                     var row = rows[widget.y];
                     var col = cols[widget.x];
@@ -301,12 +305,11 @@ function createApplication(rootNode) {
                     var col = cols[widget.x];
                     child.node.style.left = col.position + 'px';
                     child.node.style.top = row.position + 'px';
-                    if (col.type != 0) {
-                        child.node.style.width = col.size + 'px';
-                    }
-                    if (row.type != 0) {
+                    
+                    child.node.style.width = col.size + 'px';
+                    
                         child.node.style.height = row.size + 'px';
-                    }
+                    
                 }
                 //Perform layout of inner widgets
                 for (var child = node.firstChild; child != null; child = child.next) {
