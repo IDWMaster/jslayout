@@ -295,7 +295,6 @@ function createApplication(rootNode) {
                 }
 
                 //Write to DOM (batch operations)
-                node.node.style.display = 'none'; //Batch layout operations so we aren't thrashing the browser's layout engine
                 for (var child = node.firstChild; child != null; child = child.next) {
                     var widget = child.widget;
                     var row = rows[widget.y];
@@ -309,7 +308,6 @@ function createApplication(rootNode) {
                         child.node.style.height = row.size + 'px';
                     }
                 }
-                node.node.style.display = '';
                 //Perform layout of inner widgets
                 for (var child = node.firstChild; child != null; child = child.next) {
                     var widget = child.widget;
