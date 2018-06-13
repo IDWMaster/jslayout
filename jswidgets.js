@@ -82,7 +82,12 @@ function createApplication(rootNode) {
             },
             layout: function ()
             {
-                //Does nothing by default.
+                //Re-layout children
+                for (var child = widget.firstChild; child != null; child = child.next) {
+                    var lw = child.widget;
+                    lw.layout();
+                }
+
             }
         };
 
@@ -163,15 +168,16 @@ function createApplication(rootNode) {
                     }
                 }
                 for (var i = 0; i < cols.length; i++) {
+                    var col = cols[i];
                     switch (cols[i].type) {
                         case 0:
                             {
-                                cols[i].size = 0;
+                                col.size = 0;
                             }
                             break;
                         case 1:
                             {
-                                cols[i].size = 0;
+                                col.size = 0;
                             }
                             break;
                     }
@@ -210,6 +216,7 @@ function createApplication(rootNode) {
                         case 2:
                             {
                                 //Defer update
+                                remainingWidth -= col.size;
                             }
                             break;
                     }
@@ -232,6 +239,7 @@ function createApplication(rootNode) {
                         case 2:
                             {
                                 //Defer update
+                                remainingHeight -= row.size;
                             }
                             break;
                     }
@@ -301,14 +309,22 @@ function createApplication(rootNode) {
                 //Write to DOM (batch operations)
                 for (var child = node.firstChild; child != null; child = child.next) {
                     var widget = child.widget;
+                    if (widget.rowSpan == 0 || widget.colSpan == 0) {
+                        child.node.style.display = 'none'; //Element is invisible (why did the user add an invisible element to the DOM?). Don't render.
+                        continue;
+                    }
                     var row = rows[widget.y];
                     var col = cols[widget.x];
                     child.node.style.left = col.position + 'px';
                     child.node.style.top = row.position + 'px';
-                    
-                    child.node.style.width = col.size + 'px';
-                    
-                        child.node.style.height = row.size + 'px';
+                    var endRow = rows[widget.y + (widget.rowSpan - 1)];
+                    var endCol = cols[widget.x + (widget.colSpan - 1)];
+                    var computedWidth = (endCol.position + endCol.size)-col.position;
+                    var computedHeight = (endRow.position + endRow.size)-row.position;
+
+                    child.node.style.width = computedWidth + 'px';
+
+                    child.node.style.height = computedHeight + 'px';
                     
                 }
                 //Perform layout of inner widgets
