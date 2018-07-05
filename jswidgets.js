@@ -1,4 +1,50 @@
-﻿/**
+﻿//Set up browser context
+if (!Element.prototype.remove) {
+    Element.prototype.remove = function () {
+        this.parentNode.removeChild(this);
+    };
+}
+
+function LinkedList()
+{
+    var head;
+    var tail;
+    return {
+        add: function (value) {
+            var node = {value:value};
+            if (!head) {
+                head = node;
+                tail = node;
+            } else {
+                tail.next = node;
+                node.prev = tail;
+                tail = node;
+            }
+            return node;
+        },
+        remove: function (node) {
+            if (node == head) {
+                head = head.next;
+            }
+            if (node == tail) {
+                tail = tail.prev;
+            }
+            if (node.next) {
+                node.next.prev = node.prev;
+            }
+            if (node.prev) {
+                node.prev.next = node.next;
+            }
+            node.next = null;
+            node.prev = null;
+        },
+        first: function () {
+            return head;
+        }
+    };
+}
+
+/**
  * Creates a JSWidgets application
  * @param {HTMLElement} rootNode The node to initialize the application in
  */
