@@ -278,7 +278,9 @@ function createWindowManager(app) {
             
         };
         titleBar.className = "window-titlebar";
-        titleBar.innerText = title;
+        var titleText = document.createElement('span');
+        titleText.innerText = title;
+        titleBar.appendChild(titleText);
         windowDiv.appendChild(titleBar);
         var closeBtn = document.createElement('input');
         closeBtn.type = 'button';
@@ -343,6 +345,14 @@ function createWindowManager(app) {
             windowDiv.style.width = width + 'px';
             windowDiv.style.height = height + 'px';
             retval.onResize();
+        };
+        retval.getTitle = function ()
+        {
+            return title;
+        };
+        retval.setTitle = function (value) {
+            title = value;
+            titleText.innerText = value;
         };
         return retval;
     };
