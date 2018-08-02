@@ -307,7 +307,7 @@ function createWindowManager(app) {
             return windowPriv.z || 0;
         };
         retval.getBounds = function () {
-            return { x: windowDiv.offsetLeft, y: windowDiv.offsetTop, width: windowDiv.clientWidth, height: windowDiv.clientHeight };
+            return { x: windowDiv.offsetLeft, y: windowDiv.offsetTop, width: windowDiv.offsetWidth, height: windowDiv.offsetHeight };
         };
         var realRemove = retval.remove;
         retval.remove = function () {
@@ -345,6 +345,7 @@ function createWindowManager(app) {
             windowDiv.style.width = width + 'px';
             windowDiv.style.height = height + 'px';
             retval.onResize();
+            retval.layout();
         };
         retval.getTitle = function ()
         {

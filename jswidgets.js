@@ -78,6 +78,7 @@ function createApplication(rootNode) {
                     child.prev = retval.lastChild;
                     retval.lastChild = child;
                 }
+                child.parent = retval;
                 retval.node.appendChild(child.node);
             },
             remove: function () {
@@ -113,6 +114,13 @@ function createApplication(rootNode) {
             getDomNode: function () {
                 return widget.node;
             },
+            getParent: function () {
+                if (widget.parent) {
+                    return widget.parent.widget;
+                } else {
+                    return null;
+                }
+            },
             remove: function () {
                 widget.remove();
                 return retval;
@@ -120,6 +128,10 @@ function createApplication(rootNode) {
             addWidget: function (child) {
                 widget.appendChild(child.getPrivateData(key).rawNode);
                 return retval;
+            },
+            getBounds: function () {
+                var domNode = widget.node;
+                return { x: domNode.offsetLeft, y: domNode.offsetTop, width: domNode.offsetWidth, height: domNode.offsetHeight };
             },
             getPrivateData: function(ikey) {
                 if (ikey == key) {
@@ -206,6 +218,7 @@ function createApplication(rootNode) {
             var prevLayout = grid.layout;
             grid.layout = function () {
                 prevLayout();
+                var parent = grid.getParent();
                 for (var i = 0; i < rows.length; i++) {
                     switch (rows[i].type) {
                         case 0:
@@ -235,8 +248,16 @@ function createApplication(rootNode) {
                             break;
                     }
                 }
-                var gridWidth = gridDiv.offsetWidth;
-                var gridHeight = gridDiv.offsetHeight;
+                var gridWidth = 0;
+                var gridHeight = 0;
+                if (parent) {
+                    var bounds = parent.getBounds();
+                    gridWidth = bounds.width;
+                    gridHeight = bounds.height;
+                } else {
+                    gridWidth = gridDiv.clientWidth;
+                    gridHeight = gridDiv.clientHeight;
+                }
                 var remainingWidth = gridWidth;
                 var remainingHeight = gridHeight;
                 for (var child = node.firstChild; child != null; child = child.next) {
